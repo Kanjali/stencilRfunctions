@@ -132,20 +132,20 @@ addUnsoldItemsIntoSales <- function(salesDF,sohDF,i){
 #' RGB values for given color hexcode
 #' Get the color hexcodes with their RGB values into a dataframe
 #' @param datawithcolorcodes accepts dataframe
+#' @param colorNames is dataframe which is having the 3 columns (one is actual color(colname:Revised.color.code.Reqd) codes and colors names provided by client and final column is HEXCODES (colname: HexCode)).
 #' @return tempDF data frame which have a rgb values of hex code with their color codes
 #' @export
-addRGBValuesToColor<- function(datawithcolorcodes){
+addRGBValuesToColor<- function(datawithcolorcodes,colorNames){
   colorsInGivenPeriod = c(levels(as.factor(datawithcolorcodes$`COLOR-1`)),levels(as.factor(datawithcolorcodes$`COLOR-3`)),levels(as.factor(datawithcolorcodes$`COLOR-2`)))
   trim_attribute = substr(colorsInGivenPeriod,1, nchar(colorsInGivenPeriod)-2)
   LegacyColors = c("DENIM 01","DENIM 02","DENIM 04","DENIM 05","DENIM 06","DENIM 07","DENIM 08","105-1","105-2","475571-1","475571-2","475571-7","475571-9","49120-3","951236-4","2471-5","82103-6","82103-8","82103-10","Dec-")
   colordf = data.frame(TrimmedDBColorCode=trim_attribute,DBColorCode=colorsInGivenPeriod)
   revisedColorsFromDB = subset(colordf,!colordf$TrimmedDBColorCode %in%  LegacyColors)
-  colorNames = read.csv("/home/anjali/Rscripts/Inferneon-Scripts/ProlineColorsWithHexCodes.csv", strip.white = T)
   newcolors = setdiff(trimws(revisedColorsFromDB$TrimmedDBColorCode,which="both"),colorNames$Revised.color.code.Reqd)
   if(length(newcolors) !=0){
-    print("We are seeing new color codes in DB")
+    cat("We are seeing new color codes in DB, those are saved into csv file in the path: ", getwd())
     newColorDF = subset(revisedColorsFromDB,revisedColorsFromDB$TrimmedDBColorCode %in% newcolors)
-    write.csv(newColorDF,file="/home/anjali/newColorsInDB.csv", row.names = F)
+    write.csv(newColorDF,file=paste0(home,"/newColorsInDB.csv"), row.names = F)
   }else{
     ColorCodeWithColorNames = merge(revisedColorsFromDB,colorNames, by.x="TrimmedDBColorCode",by.y="Revised.color.code.Reqd")
     ColorCodeWithColorNames=ColorCodeWithColorNames[!duplicated(ColorCodeWithColorNames),]
@@ -167,6 +167,9 @@ addRGBValuesToColor<- function(datawithcolorcodes){
 }
 
 #' Close DB connections
+#' @param : there is no inputs for this function
+#' @return ntg to return, close the DB connections which are in open
+#' @export
 
 closeDbConnection<- function(){
   cons = dbListConnections(MySQL())
@@ -182,22 +185,25 @@ closeDbConnection<- function(){
 #' @export
 
 dataSavingIntoCsvFiles = function(finalDF){
+  home=getwd()
   drops = c("Category..L5.","Store_Name","seasonName","Style")
   for(store in Stores){
-    setwd("/home/anjali")
+    setwd(home)
     if(dir.exists(store)){
       unlink(store, recursive = T)
     }
-    dir.create(store)
-    setwd(paste0("/home/anjali/",store))
+    dir.create(paste0(home,"/",store))
+    setwd(paste0(home,"/",store))
     print("folder is created with storeName")
     for(attributeValue in Products$Attribute_Value){
       attributeDF = subset(finalDF,finaldata$Category..L5.==attributeValue)
       if(nrow(attributeDF)!=0){
         attributeDF[drops] = NULL
         write.csv(attributeDF,file=paste0(getwd(),"/",attributeValue,".csv"), row.names=F)
+        cat("attribute data is going to save in csv in: ", getwd()," directory")
       }
     }
     cat("Finally data saved into files in local for store: ",store)
   }
 }
+

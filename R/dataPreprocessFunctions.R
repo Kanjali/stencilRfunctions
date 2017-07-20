@@ -136,6 +136,7 @@ addUnsoldItemsIntoSales <- function(salesDF,sohDF,i){
 #' @return tempDF data frame which have a rgb values of hex code with their color codes
 #' @export
 addRGBValuesToColor<- function(datawithcolorcodes,colorNames){
+  home = getwd()
   colorsInGivenPeriod = c(levels(as.factor(datawithcolorcodes$`COLOR-1`)),levels(as.factor(datawithcolorcodes$`COLOR-3`)),levels(as.factor(datawithcolorcodes$`COLOR-2`)))
   trim_attribute = substr(colorsInGivenPeriod,1, nchar(colorsInGivenPeriod)-2)
   LegacyColors = c("DENIM 01","DENIM 02","DENIM 04","DENIM 05","DENIM 06","DENIM 07","DENIM 08","105-1","105-2","475571-1","475571-2","475571-7","475571-9","49120-3","951236-4","2471-5","82103-6","82103-8","82103-10","Dec-")

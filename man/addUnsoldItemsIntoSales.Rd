@@ -2,7 +2,7 @@
 % Please edit documentation in R/dataPreprocessFunctions.R
 \name{addUnsoldItemsIntoSales}
 \alias{addUnsoldItemsIntoSales}
-\title{Add unsold items from soh data into sales data}
+\title{Add unsold items from soh data into sales data and aslo add one more columns soh quantity in final DF}
 \usage{
 addUnsoldItemsIntoSales(salesDF, sohDF, i)
 }
@@ -17,5 +17,5 @@ addUnsoldItemsIntoSales(salesDF, sohDF, i)
 finally return a data frame by combining sales and soh.
 }
 \description{
-Add unsold items from soh data into sales data
+Add unsold items from soh data into sales data and aslo add one more columns soh quantity in final DF
 }

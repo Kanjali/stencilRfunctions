@@ -1,3 +1,11 @@
+library(lubridate)
+library(lubridate)
+library(dummies)
+library(neuralnet)
+library(randomForest)
+library(Metrics)
+library(caret)
+
 #' Get the FY period number and year for given dates
 #'
 #' It takes character values
@@ -91,7 +99,7 @@ getSohForStartingWeekOfDate <- function(soh_period,sales_with_period,minperiod,m
   return(soh)
 }
 
-#' Add unsold items from soh data into sales data
+#' Add unsold items from soh data into sales data and aslo add one more columns soh quantity in final DF
 #'
 #' @param salesDF sales dataframe
 #' @param sohDF soh dataframe

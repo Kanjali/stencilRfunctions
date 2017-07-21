@@ -1,11 +1,3 @@
-library(lubridate)
-library(lubridate)
-library(dummies)
-library(neuralnet)
-library(randomForest)
-library(Metrics)
-library(caret)
-
 #' Get the FY period number and year for given dates
 #'
 #' It takes character values
@@ -32,7 +24,7 @@ getPeriodNumbers <- function(startDate,endDate,periodType){
       if(date==start){
         week=1
       }else if(date!=start & count==1){
-        week=1
+        week=0
         tempdate = start
         tempdate=as.Date(tempdate, origin="1970-01-01")
         while(tempdate<date){

@@ -6,6 +6,12 @@
 \usage{
 closeDbConnection()
 }
+\arguments{
+\item{:}{there is no inputs for this function}
+}
+\value{
+ntg to return, close the DB connections which are in open
+}
 \description{
 Close DB connections
 }

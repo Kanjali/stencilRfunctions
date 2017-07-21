@@ -5,10 +5,12 @@
 \title{RGB values for given color hexcode
 Get the color hexcodes with their RGB values into a dataframe}
 \usage{
-addRGBValuesToColor(datawithcolorcodes)
+addRGBValuesToColor(datawithcolorcodes, colorNames)
 }
 \arguments{
 \item{datawithcolorcodes}{accepts dataframe}
+
+\item{colorNames}{is dataframe which is having the 3 columns (one is actual color(colname:Revised.color.code.Reqd) codes and colors names provided by client and final column is HEXCODES (colname: HexCode)).}
 }
 \value{
 tempDF data frame which have a rgb values of hex code with their color codes

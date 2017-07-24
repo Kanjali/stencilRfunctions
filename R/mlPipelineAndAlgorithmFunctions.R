@@ -5,7 +5,7 @@
 
 mlPipeline <- function(inputForMLPipeline){
   oneHotEncoadingColumns = c("Size","Category..L6.","Collection","Fab.Content","Fabrictype","Neck","Yarn","Sleeve","Gender","Tops.Bottom","BRAND")
-  reqColumns = colnames(inputForMLPipeline)[!colnames(inputForMLPipeline) %in% c("Sku","Year","Date","Period","Sales_Qty","Soh_Qty")]
+  reqColumns = colnames(inputForMLPipeline)[!colnames(inputForMLPipeline) %in% c("Sku","Year","Date")]
   #Iterate over the columns and apply onehotencoding and removed columns having levels of factor == 1
   UniqueLevelColumns =c()
   for(colname in reqColumns){
@@ -73,7 +73,7 @@ complimentary_colum_selector<-function(data,columns){
 nnAlgorithm<-function(Training_set,Prediction_set,hidden_layers,step_max,pipeline_output){
   set.seed(10)
   train_data_col<-colnames(Training_set)
-  formul <- as.formula(paste("Sales_Qty ~", paste(train_data_col[!train_data_col %in% c("Sku","Year","Date","Sales_Qty")], collapse = " + ")))
+  formul <- as.formula(paste("Sales_Qty ~", paste(train_data_col[!train_data_col %in% c("Sku","Year","Date","MRP")], collapse = " + ")))
   print("Run the neuralnet algorithm ..,")
   nn <- neuralnet(formul,data=Training_set,hidden=hidden_layers,stepmax = step_max,linear.output=T)
   print("ran neuralnet function..,")

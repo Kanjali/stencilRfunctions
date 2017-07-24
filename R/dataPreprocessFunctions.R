@@ -137,16 +137,20 @@ addUnsoldItemsIntoSales <- function(salesDF,sohDF,i){
 #' @export
 addRGBValuesToColor<- function(datawithcolorcodes,colorNames){
   home = getwd()
-  colorsInGivenPeriod = c(levels(as.factor(datawithcolorcodes$`COLOR-1`)),levels(as.factor(datawithcolorcodes$`COLOR-3`)),levels(as.factor(datawithcolorcodes$`COLOR-2`)))
+  colnames = names(datawithcolorcodes[grepl("color", tolower(names(datawithcolorcodes)))])
+  print(colnames)
+  colorsInGivenPeriod = c(levels(as.factor(datawithcolorcodes[,colnames[1]])),levels(as.factor(datawithcolorcodes[,colnames[2]])),levels(as.factor(datawithcolorcodes[,colnames[3]])))
+  #colorsInGivenPeriod = c(levels(as.factor(datawithcolorcodes$`COLOR-1`)),levels(as.factor(datawithcolorcodes$`COLOR-2`)),levels(as.factor(datawithcolorcodes$`COLOR-3`)),levels(as.factor(datawithcolorcodes$`COLOR1`)),levels(as.factor(datawithcolorcodes$`COLOR2`)),levels(as.factor(datawithcolorcodes$`COLOR3`)))
   trim_attribute = substr(colorsInGivenPeriod,1, nchar(colorsInGivenPeriod)-2)
   LegacyColors = c("DENIM 01","DENIM 02","DENIM 04","DENIM 05","DENIM 06","DENIM 07","DENIM 08","105-1","105-2","475571-1","475571-2","475571-7","475571-9","49120-3","951236-4","2471-5","82103-6","82103-8","82103-10","Dec-")
-  colordf = data.frame(TrimmedDBColorCode=trim_attribute,DBColorCode=colorsInGivenPeriod)
   revisedColorsFromDB = subset(colordf,!colordf$TrimmedDBColorCode %in%  LegacyColors)
+  colorNames = read.csv("/home/anjali/Rscripts/Inferneon-Scripts/ProlineColorsWithHexCodes.csv", strip.white = T)
   newcolors = setdiff(trimws(revisedColorsFromDB$TrimmedDBColorCode,which="both"),colorNames$Revised.color.code.Reqd)
   if(length(newcolors) !=0){
-    cat("We are seeing new color codes in DB, those are saved into csv file in the path: ", getwd())
+    print("We are seeing new color codes in DB")
     newColorDF = subset(revisedColorsFromDB,revisedColorsFromDB$TrimmedDBColorCode %in% newcolors)
     write.csv(newColorDF,file=paste0(home,"/newColorsInDB.csv"), row.names = F)
+    break
   }else{
     ColorCodeWithColorNames = merge(revisedColorsFromDB,colorNames, by.x="TrimmedDBColorCode",by.y="Revised.color.code.Reqd")
     ColorCodeWithColorNames=ColorCodeWithColorNames[!duplicated(ColorCodeWithColorNames),]
@@ -158,13 +162,13 @@ addRGBValuesToColor<- function(datawithcolorcodes,colorNames){
     colorWithRgbValues = subset(tempcolorDF,select =-c(TrimmedDBColorCode,Color.Name,HexCode))
   }
   tempDF=datawithcolorcodes
-  for(colorcolum in c("COLOR-1","COLOR-2","COLOR-3")){
+  for(colorcolum in colnames){
     index = substr(colorcolum,nchar(colorcolum),nchar(colorcolum))
+    print(index)
     data = merge(tempDF,colorWithRgbValues, by.x=colorcolum,by.y="DBColorCode")
-    setnames(data,c("Red","Green","Blue"),c(paste0("Color",index,".Red"),paste0("Color",index,".Green"),paste0("Color",index,".Blue")))
+    setnames(data,c("Red","Green","Blue"),c(paste0("Color",index,"-Red"),paste0("Color",index,"-Green"),paste0("Color",index,"-Blue")))
     tempDF=data
   }
-  return(tempDF)
 }
 
 #' Close DB connections

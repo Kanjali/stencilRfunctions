@@ -26,13 +26,18 @@ mlPipeline <- function(inputForMLPipeline){
 #' Normalize the one hot encoding data to generate input for NN
 #'
 #' @param MlOutputData is a dataframe
-#' @param columns is a vector having columns names which need to be normailize
 #' @return the dataframe after did the normalisation
 #' @export
 
 NormalizeData<-function(MlOutputData){
+  charactercolumns = colnames(InputForNormalisation)[!sapply(InputForNormalisation, class) %in% c('numeric','integer')]
+  for(column in charactercolumns){
+    MlOutputData[[column]] = as.numeric(as.character(MlOutputData[[column]]))
+  }
   mins=as.numeric(apply(MlOutputData,2,min))
+  print(length(mins))
   maxs=as.numeric(apply(MlOutputData,2,max))
+  print(length(maxs))
   MlOutputData=as.data.frame(scale(MlOutputData,center = mins, scale = maxs - mins))
   return(MlOutputData)
 }

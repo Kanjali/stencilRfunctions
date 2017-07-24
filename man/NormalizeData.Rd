@@ -8,8 +8,6 @@ NormalizeData(MlOutputData)
 }
 \arguments{
 \item{MlOutputData}{is a dataframe}
-
-\item{columns}{is a vector having columns names which need to be normailize}
 }
 \value{
 the dataframe after did the normalisation

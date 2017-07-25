@@ -5,7 +5,7 @@
 
 mlPipeline <- function(inputForMLPipeline){
   oneHotEncoadingColumns = c("Size","Category..L6.","Collection","Fab.Content","Fabrictype","Neck","Yarn","Sleeve","Gender","Tops.Bottom","BRAND")
-  reqColumns = colnames(inputForMLPipeline)[!colnames(inputForMLPipeline) %in% c("Sku","Year","Date")]
+  reqColumns = colnames(inputForMLPipeline)[!colnames(inputForMLPipeline) %in% c("Sku","Year","Date","Sales_Qty","Soh_Qty","Period")]
   #Iterate over the columns and apply onehotencoding and removed columns having levels of factor == 1
   UniqueLevelColumns =c()
   for(colname in reqColumns){
@@ -17,7 +17,7 @@ mlPipeline <- function(inputForMLPipeline){
   ohc_data = dummy.data.frame(inputForMLPipeline[oneHotEncoadingColumns],sep="")
   inputForMLPipeline=cbind(inputForMLPipeline,ohc_data)
   drops=union(oneHotEncoadingColumns,UniqueLevelColumns)
-  inputForMLPipeline = inputForMLPipeline <- inputForMLPipeline[ , !(names(inputForMLPipeline) %in% drops)]
+  inputForMLPipeline = inputForMLPipeline[ , !(names(inputForMLPipeline) %in% drops)]
   print(dim(inputForMLPipeline))
   names(inputForMLPipeline)=make.names(names(inputForMLPipeline), unique=TRUE)
   return(inputForMLPipeline)

@@ -143,6 +143,7 @@ addRGBValuesToColor<- function(datawithcolorcodes,colorNames){
   #colorsInGivenPeriod = c(levels(as.factor(datawithcolorcodes$`COLOR-1`)),levels(as.factor(datawithcolorcodes$`COLOR-2`)),levels(as.factor(datawithcolorcodes$`COLOR-3`)),levels(as.factor(datawithcolorcodes$`COLOR1`)),levels(as.factor(datawithcolorcodes$`COLOR2`)),levels(as.factor(datawithcolorcodes$`COLOR3`)))
   trim_attribute = substr(colorsInGivenPeriod,1, nchar(colorsInGivenPeriod)-2)
   LegacyColors = c("DENIM 01","DENIM 02","DENIM 04","DENIM 05","DENIM 06","DENIM 07","DENIM 08","105-1","105-2","475571-1","475571-2","475571-7","475571-9","49120-3","951236-4","2471-5","82103-6","82103-8","82103-10","Dec-")
+  colordf = data.frame(TrimmedDBColorCode=trim_attribute,DBColorCode=colorsInGivenPeriod)
   revisedColorsFromDB = subset(colordf,!colordf$TrimmedDBColorCode %in%  LegacyColors)
   #colorNames = read.csv("/home/anjali/Rscripts/Inferneon-Scripts/ProlineColorsWithHexCodes.csv", strip.white = T)
   newcolors = setdiff(trimws(revisedColorsFromDB$TrimmedDBColorCode,which="both"),colorNames$Revised.color.code.Reqd)
@@ -160,15 +161,16 @@ addRGBValuesToColor<- function(datawithcolorcodes,colorNames){
     print("Adding RGB values to the color code")
     tempcolorDF=cbind(ColorCodeWithColorNames,Red=rgbDF[,"red"],Green=rgbDF[,"green"],Blue=rgbDF[,"blue"])
     colorWithRgbValues = subset(tempcolorDF,select =-c(TrimmedDBColorCode,Color.Name,HexCode))
+    tempDF=datawithcolorcodes
+    for(colorcolum in colnames){
+      index = substr(colorcolum,nchar(colorcolum),nchar(colorcolum))
+      print(index)
+      data = merge(tempDF,colorWithRgbValues, by.x=colorcolum,by.y="DBColorCode")
+      setnames(data,c("Red","Green","Blue"),c(paste0("Color",index,"-Red"),paste0("Color",index,"-Green"),paste0("Color",index,"-Blue")))
+      tempDF=data
+    }
   }
-  tempDF=datawithcolorcodes
-  for(colorcolum in colnames){
-    index = substr(colorcolum,nchar(colorcolum),nchar(colorcolum))
-    print(index)
-    data = merge(tempDF,colorWithRgbValues, by.x=colorcolum,by.y="DBColorCode")
-    setnames(data,c("Red","Green","Blue"),c(paste0("Color",index,"-Red"),paste0("Color",index,"-Green"),paste0("Color",index,"-Blue")))
-    tempDF=data
-  }
+  return(tempDF)
 }
 
 #' Close DB connections

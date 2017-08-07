@@ -35,9 +35,7 @@ NormalizeData<-function(MlOutputData){
     MlOutputData[[column]] = as.numeric(as.character(MlOutputData[[column]]))
   }
   mins=as.numeric(apply(MlOutputData,2,min))
-  print(length(mins))
   maxs=as.numeric(apply(MlOutputData,2,max))
-  print(length(maxs))
   MlOutputData=as.data.frame(scale(MlOutputData,center = mins, scale = maxs - mins))
   return(MlOutputData)
 }

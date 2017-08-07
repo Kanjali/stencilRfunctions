@@ -104,9 +104,9 @@ addUnsoldItemsIntoSales <- function(salesDF,sohDF,i){
   salesDF=salesDF[salesDF$Sales_Qty>0,]
   print("Removed negatives from soh data")
   if(nrow(salesDF)!=0){
-    unsolditems= anti_join(sohDF,salesDF, by=c("Sku","Period","Year","Sales_Qty","Store_Name"))
+    unsolditems= anti_join(sohDF,salesDF, by=c("Sku","Period","Year","Store_Name"))
     print(nrow(unsolditems))
-    onlysales=anti_join(salesDF,sohDF, by=c("Sku","Period","Year","Sales_Qty","Store_Name"))
+    onlysales=anti_join(salesDF,sohDF, by=c("Sku","Period","Year","Store_Name"))
     sohdata= rbind(onlysales,sohDF)
     sohdata = as.data.frame(sohdata)
     #Adding soh column to the data

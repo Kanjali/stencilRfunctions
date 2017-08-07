@@ -93,6 +93,7 @@ nnAlgorithm<-function(Training_set,Prediction_set,hidden_layers,step_max,pipelin
   print("Done with denormalization of values")
   #ERROR calculation
   error=mse(predicted,actualsales)
+  print(error)
   ref<<-cbind(Prediction_set$Sku,as.character(Prediction_set$Year),as.character(Prediction_set$Date),periods,soh,predicted,actualsales)
   colnames(ref)<<-c("Sku","Year","Date","Period","SOH","Predicted_sales","Actual_sales")
   print("done with creating the final result of NN algorithm")

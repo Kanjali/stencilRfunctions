@@ -102,10 +102,9 @@ getSohForStartingWeekOfDate <- function(soh_period,sales_with_period,minperiod,m
 addUnsoldItemsIntoSales <- function(salesDF,sohDF,i){
   sohDF=sohDF[sohDF$Sales_Qty>0,]
   salesDF=salesDF[salesDF$Sales_Qty>0,]
-  print("Removed negatives from soh data")
+  print("Removed negatives from both sales and soh data")
   if(nrow(salesDF)!=0){
     unsolditems= anti_join(sohDF,salesDF, by=c("Sku","Period","Year","Store_Name"))
-    print(nrow(unsolditems))
     onlysales=anti_join(salesDF,sohDF, by=c("Sku","Period","Year","Store_Name"))
     sohdata= rbind(onlysales,sohDF)
     sohdata = as.data.frame(sohdata)
@@ -126,8 +125,10 @@ addUnsoldItemsIntoSales <- function(salesDF,sohDF,i){
     unsolditemsIntoSales=sohDF
     unsolditemsIntoSales$Soh_Qty=sohDF$Sales_Qty
   }
+  print(nrow(unsolditemsIntoSales))
   return(unsolditemsIntoSales)
 }
+
 
 #' RGB values for given color hexcode
 #' Get the color hexcodes with their RGB values into a dataframe

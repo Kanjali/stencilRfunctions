@@ -110,7 +110,7 @@ addUnsoldItemsIntoSales <- function(salesDF,sohDF,i){
     sohdata= rbind(onlysales,sohDF)
     sohdata = as.data.frame(sohdata)
     #Adding soh column to the data
-    sohdata =sohdata[colnames(sohdata) %in% c("Sku","Period","Year","Sales_Qty","Store_Name")]
+    sohdata =sohdata[,colnames(sohdata) %in% c("Sku","Period","Year","Sales_Qty","Store_Name")]
     names(sohdata)[names(sohdata)=="Sales_Qty"]="Soh_Qty"
     print("changes column name to soh_Qty")
     unsolditems$Sales_Qty=0

@@ -24,10 +24,10 @@ getPeriodNumbers <- function(startDate,endDate,periodType){
       if(date==start){
         week=1
       }else if(date!=start & count==1){
-        week=0
+        week=1
         tempdate = start
         tempdate=as.Date(tempdate, origin="1970-01-01")
-        while(tempdate<date){
+        while(tempdate<=date){
           if(weekdays(tempdate)=="Monday"){
             week=week+1
           }
